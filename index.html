@@ -1,3 +1,650 @@
-<h1>Early Education</h>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
 
-<p> This will soon house my D3 class project! Coming soon. </p>
+
+<style type="text/css">
+
+.container {
+  width: 1050px;
+}    
+    
+path {
+    stroke: gray;
+    stroke-width: 1;
+}
+
+path:hover {
+     stroke-width: 1;
+    stroke: black;
+}
+    
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    min-width: 100px;
+    height: 100px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: white;
+    border: 1px green solid;
+    border-radius: 5px;
+    pointer-events: none;
+}
+
+.tooltip p {
+    margin: 5px;
+}
+
+/* Legend Font Style */
+body {
+    font: 12px sans-serif;
+    height: 800px;
+}
+
+/* Legend Position Style */
+.legend {
+    position:absolute;
+    left:800px;
+    top:350px;
+}
+    
+.textbox {
+     margin-left: 50px;
+}
+    
+a {
+ color: grey;
+    text-decoration: none;
+}
+
+a:hover {
+ color: black;   
+}
+    
+h1 {
+  font-size: 26px;
+    font-family: futura;
+  padding: 0px 0 5px 0;
+  line-height: 1.2em;
+  color: #000;
+  margin-bottom: 0px;
+   text-align:  center;
+}
+    
+
+
+#lead {
+  clear: both;
+  width: 600px;
+}
+
+#lead p {
+  color: #444;
+  font-family: Futura,Georgia,Palatino,serif;
+  font-size: 1.0em;
+  line-height: 1.4em;
+    width:700px;
+    margin-left: 200px;
+}
+
+#vis {
+  position: relative;
+  display: block;
+}
+
+.chart {
+  position: absolute;
+  padding-right: 5px;
+  padding-bottom: 5px;
+  padding-top:0;
+  padding-left:0;
+}
+
+svg {
+  font-size: 9px;
+}
+
+.background {
+  fill: none;
+}
+
+.area {
+  fill: #ccfff2;
+}
+
+.line {
+  fill: none;
+  stroke: #334C80;
+  stroke-width: 1.4px;
+}
+
+.title {
+  font-size: 12px;
+}
+
+.axis line, .grid line {
+  stroke-width: .5px;
+  shape-rendering: crispEdges;
+  stroke: #fff;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.axis path {
+  display: none;
+}
+
+.hidden {
+  display:none;
+  opacity: 0.0;
+}
+
+#button-wrap {
+  width: 400px;
+  height: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  padding-left: 5px;
+}
+
+.button {
+  cursor: pointer;
+  float: left;
+  height: 30px;
+  text-align: center;
+  background: #fcfcfc;
+  display: block;
+  padding: 5px 15px;
+  border-radius: 50px 50px 50px 50px;
+}
+
+.button.active {
+  box-shadow: inset 0px 0px 7px rgba(0,0,0,0.18);
+  pointer-events: none;
+  background-color: #ccfff2;
+}
+
+#count {
+  border-radius: 5px 0px 0px 5px;
+}
+
+#name {
+  border-radius: 0px 5px 5px 0px;
+}    
+
+.introtext {
+ margin: 50px;   
+    
+}
+    
+    
+</style>
+</head>
+<body>
+   
+   <div class="introtext">
+    <h1>Who's Leading the Way on Early Education and Why It Matters.</h1>
+    <h3> Research Indicates that the key to a successful academic career has to do with getting off to a good start.  Although there is bi-partisan support for high-quality early education, some states are doing a better job than others on not only getting young students to enroll but even to provide significant funding for education overall.</h3>
+   </div>
+   
+    <div class="textbox">
+    <h2>Percentage of 3- and 4-year-old children enrolled in school</h2>
+    <h4>Northeastern States Leading the Way in Early Education.</h4>  
+    <p>There you find <em>New Jersey</em> and <em>Connecticut</em>, both states with 62% enrolled.</p> 
+    <p>However, in the region <em>Rhode Island</em> and <em>Maine</em> stick out with low enrollment with 44% and 45% respectively</p>
+    <p>It's also worth noting the discrepancies by race.</p>
+    <a href="https://nces.ed.gov/programs/digest/d14/tables/dt14_202.25.asp?current=yes">Source: National Center For Education Statistics</a>
+    </div>
+   
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="https://d3js.org/queue.v1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/1.9.0/d3-legend.js"></script>
+<script type="text/javascript">
+
+
+//Width and height of map
+var width = 960;
+var height = 500;
+
+// D3 Projection
+var projection = d3.geo.albersUsa()
+                   .translate([width/2, height/2])    // translate to center of screen
+                   .scale([1000]);          // scale things down so see entire US
+
+// Define path generator
+var path = d3.geo.path()               // path generator that will convert GeoJSON to SVG paths
+             .projection(projection);  // tell path generator to use albersUsa projection
+
+
+// Define linear scale for output
+var stateColor = d3.scale.linear()
+              .range(["#ccfff2", "green"]);
+
+
+//Create SVG element and append map to the SVG
+var svg1 = d3.select("body")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+// Append Div for tooltip to SVG
+var div1 = d3.select("body")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("display", "none");
+
+queue()
+    .defer(d3.json, "data/us-states.json")
+    .defer(d3.csv, "data/earlyenrollment.csv")
+    .await(ready);
+
+function ready(error, json, states) {
+
+    stateColor.domain(d3.extent(states,function(s) { return s.Total;})); // setting the range of the input data
+
+    // Loop through each state data value in the .csv file
+    states.forEach(function(state) {
+        // Grab State Name
+        var dataState = state.State; 
+        
+        var dataValue = +state.Total; 
+        
+        var dataBlack = +state.Black;
+        
+        var dataWhite = +state.White;
+        
+        var dataHispanic = +state.Hispanic;
+        
+        var dataAsian = +state.Asian;
+
+        json.features.forEach(function(j) {
+            var jsonState = j.properties.name;
+            if (dataState == jsonState) { 
+                
+                j.properties.totals = dataValue;
+                j.properties.blacks = dataBlack;
+                j.properties.whites = dataWhite;
+                j.properties.hispanics = dataHispanic;
+                j.properties.asians = dataAsian;
+           
+            }
+        });
+    }); // ends data merge
+
+    
+ d3.selection.prototype.moveToFront = function() {
+    return this.each(function(){
+      this.parentNode.appendChild(this);
+    });
+  };    
+    
+
+    // Bind the data to the SVG and create one path per GeoJSON feature
+    svg1.selectAll("path")
+        .data(json.features)
+        .enter()
+        .append("path")
+        .attr("d", path)
+        .style("fill", function(d) {
+    
+            var value = d.properties.totals;
+            return stateColor(value);
+        })
+        .on("mouseover", function(d) {
+            div1.transition()
+               .duration(200)
+               .style("display", null);
+            div1.html("<p>In " + d.properties.name +  " " + d.properties.totals + "% of 3 and 4-year-olds are enrolled in a school.</p>" + "<br>" +  d.properties.whites + "% of those 3 and 4-year-olds are white."+ "<br>" +  d.properties.blacks + "% of those 3 and 4-year-olds are black."+ "<br>" + d.properties.hispanics + "% of those 3 and 4-year-olds are latino."+ "<br>" +  d.properties.asians + "% of those 3 and 4-year-olds are asian.")
+               .style("left", (d3.event.pageX + 10) + "px")
+               .style("top", (d3.event.pageY - 28) + "px");
+        d3.select(this).moveToFront();
+        
+        })
+        // fade out tooltip on mouse out
+        .on("mouseout", function(d) {
+            div1.transition()
+               .duration(500)
+               .style("display", "none");
+        });
+    
+
+
+    svg1.append("g")
+    .attr("class", "legendColors")
+        .attr("transform", "translate(800, 200)"); // where we put it on the page!
+
+    var legendColors = d3.legend.color()
+    .shapeWidth(10)
+    .title("Total Percentage Enrolled")
+    .labelFormat(d3.format("1f"))
+    .scale(stateColor);
+
+    svg1.select(".legendColors")
+    .call(legendColors);
+
+
+}
+    
+</script>
+
+
+
+
+ <div class="container">
+    <h1>Investing in Every Student</h1>
+    <div id="lead">
+<p>Inflation-adjusted current expenditures per pupil for public elementary and secondary education.</p>
+    </div>
+    <div id="main">
+      <div id="button-wrap">
+        <div id="count" class="button active">Most Per Pupil</div>
+        <div id="decline" class="button">Biggest Drop</div>
+        <div id="state" class="button">Alphabetical</div>
+      </div>
+      <div id="vis"></div>
+    </div>
+  </div> <!--! end of #container -->
+
+ 
+
+
+
+<script type="text/javascript">
+
+  var fullwidth = 200,
+    fullheight = 120,
+    margin = {
+      top: 15,
+      right: 20,
+      bottom: 40,
+      left: 40
+    };
+
+  var width = fullwidth - margin.left - margin.right;
+  var height = fullheight - margin.top - margin.bottom;
+
+  var measure= "expenditures";
+  
+
+  var data = [],
+      circle = null,
+      caption = null,
+      curYear = null;
+
+  var bisect = d3.bisector(function(d) {
+    return d.date;
+  }).left;
+
+  var format = d3.time.format("%Y");
+  var xScale = d3.time.scale().range([0, width]).clamp(true);
+  var yScale = d3.scale.linear().range([height, 0]).clamp(true);
+
+  var xValue = function(d) {
+    return d.date;
+  };
+  var yValue = function(d) {
+    return d.count;
+  };
+
+  var yAxis = d3.svg.axis()
+    .scale(yScale)
+    .orient("left")
+    .ticks(3)
+    .outerTickSize(0)
+    .tickFormat(d3.format("$")); 
+
+  var area = d3.svg.area().x(function(d) {
+    return xScale(xValue(d));
+      }).y0(height).y1(function(d) {
+      return yScale(yValue(d));
+    });
+
+  // line on top of the area plot
+  var line = d3.svg.line().x(function(d) {
+      return xScale(xValue(d));
+    }).y(function(d) {
+      return yScale(yValue(d));
+  });
+
+  function setupScales(data) {
+    var extentX, maxY;
+    maxY = d3.max(data, function(c) {
+      return d3.max(c.values, function(d) {
+        return yValue(d);
+      });
+    });
+    maxY = maxY + (maxY * 1 / 4);
+    yScale.domain([0, maxY]);
+    extentX = d3.extent(data[0].values, function(d) {
+      return xValue(d);
+    });
+    return xScale.domain(extentX);
+  }
+
+  function transformData(rawData) {
+    var format, nest;
+    format = d3.time.format("Year %Y");
+    rawData.forEach(function(d) {
+      d.date = format.parse(d.year);
+      d.count = +d[measure]; // variable set above, a global
+    });
+    var nest = d3.nest().key(function(d) {
+      return d.state;
+    }).sortValues(function(a, b) {
+      return d3.ascending(a.date, b.date);
+    }).entries(rawData);
+    nest = nest.filter(function(d) {return d.values.length == 16;});
+    return nest;
+  }
+
+// borrowed from british cooking example: http://britains-diet.labs.theodi.org/?es_p=1359956
+
+  var cols, margin_left;
+  function calibrate() {
+    cols = Math.floor(window.innerWidth/fullwidth/1.5),
+    margin_left = window.innerWidth%fullwidth/1.5;
+    console.log("cols", cols);
+  }
+
+  function getLeft(i) {
+    return margin_left + fullwidth * (i%cols) + "px";
+  }
+
+  function getTop(i) {
+    return fullheight * Math.floor(i/cols) + "px";
+  }
+
+  function setChartDivHeight(data_to_plot) {
+  d3.select("#vis").style("height", fullheight * Math.ceil(data_to_plot.length/cols) + "px")
+  }
+
+  function layoutCharts(data_to_plot) {
+    calibrate();
+    setChartDivHeight(data_to_plot);
+    setupScales(data_to_plot);
+
+    var charts = d3.select("#vis").selectAll(".chart").data(data_to_plot, function(d) { return d.key; });
+    charts.enter().append("div")
+      .attr("class", "chart")
+      .attr("id", function(d) { return "chart-" + d.key; })
+      .style("left", function(d, i) { return getLeft(i); })
+      .style("top", function(d, i) { return getTop(i); })
+    .each(appendChart);
+
+    charts
+      .transition().duration(5000).delay(function(d, i) { return i * 10; })
+      .style("left", function(d, i) { return getLeft(i); })
+      .style("top", function(d, i) { return getTop(i); });
+
+    charts.exit().remove();
+  } // end layout charts
+
+
+  var data;
+
+  d3.csv("data/expenditures_sorted.csv", drawPlots);
+
+
+    function drawPlots(error, rawData) {
+
+       if (error) {
+        console.log(error);
+      };
+      data = transformData(rawData);
+      // default sort order
+      data.sort(function(a, b) {
+        return d3.descending(+a.values[b.values.length-1].count, +b.values[a.values.length-1].count);
+      });
+      layoutCharts(data);
+
+    } // end drawPlots
+
+
+    function appendChart(data, i) {
+
+
+      var svg = d3.select(this).append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      svg.append("rect")
+        .attr("class", "background")
+        .style("pointer-events", "all")
+        .attr("width", width + margin.right) // extra space for labels that appear
+        .attr("height", height).on("mouseover", mouseover1)
+        .on("mousemove", mousemove1)
+        .on("mouseout", mouseout1);
+
+      var lines = svg.append("g");
+
+      lines.append("path")
+        .attr("class", "area")
+        .style("pointer-events", "none")
+        .attr("d", function(c) {
+          return area(c.values);
+      });
+      lines.append("path")
+        .attr("class", "line")
+        .style("pointer-events", "none")
+        .attr("d", function(c) {
+        return line(c.values);
+      });
+
+      lines.append("text")
+        .attr("class", "title")
+        .attr("text-anchor", "middle")
+        .attr("y", height)
+        .attr("dy", margin.bottom / 2 + 5)
+        .attr("x", width / 2).text(function(c) {
+          return c.key;
+      });
+
+      lines.append("text")
+        .attr("class", "static_year")
+        .attr("text-anchor", "start")
+        .style("pointer-events", "none")
+        .attr("dy", 13).attr("y", height)
+        .attr("x", 0).text(function(c) {
+          return xValue(c.values[0]).getFullYear();
+      });
+      lines.append("text")
+      .attr("class", "static_year")
+      .attr("text-anchor", "end")
+      .style("pointer-events", "none").attr("dy", 13)
+      .attr("y", height).attr("x", width).text(function(c) {
+        return xValue(c.values[c.values.length - 1]).getFullYear();
+      });
+
+      circle = lines.append("circle")
+        .attr("r", 2.2)
+        .attr("opacity", 0)
+        .style("pointer-events", "none");
+      caption = lines.append("text")
+        .attr("class", "caption")
+        .attr("text-anchor", "middle")
+        .style("pointer-events", "none")
+        .attr("dy", -8);
+      curYear = lines.append("text")
+        .attr("class", "year")
+        .attr("text-anchor", "middle")
+        .style("pointer-events", "none")
+        .attr("dy", 13)
+        .attr("y", height);
+
+      svg.append("g").attr("class", "y axis").call(yAxis);
+
+    } // end of append chart
+
+  d3.select("#button-wrap").selectAll("div").on("click", function() {
+    var id;
+    id = d3.select(this).attr("id");
+    d3.select("#button-wrap").selectAll("div").classed("active", false);
+    d3.select("#" + id).classed("active", true);
+
+    // sort methods
+    if (id == "state") {
+      data.sort(function(a, b) { return d3.ascending(a.key, b.key);}); 
+    }
+    if (id == "count") {
+      data.sort(function(a, b) {
+        return d3.descending(+a.values[a.values.length-1].count, +b.values[b.values.length-1].count);
+      });
+    }
+    if (id == "decline") {
+      data.sort(function(a, b) {
+        return d3.descending(a.values[0].count - a.values[a.values.length-1].count,
+           b.values[0].count - b.values[b.values.length-1].count);
+      });
+    }
+    layoutCharts(data);
+  }); // end button setup
+
+    function mouseover1() {
+    d3.selectAll("circle").attr("opacity", 1.0);
+    d3.selectAll(".static_year").classed("hidden", true);
+    return mousemove.call(this); // current graph base
+    };
+
+    function mousemove1() {
+      var date, index, year;
+      year = xScale.invert(d3.mouse(this)[0]).getFullYear();
+      date = format.parse('' + year);
+      index = 0;
+      d3.selectAll("circle")
+        .attr("cx", xScale(date))
+        .attr("cy", function(c) {
+          index = bisect(c.values, date, 0, c.values.length - 1);
+          return yScale(yValue(c.values[index]));
+      });
+      d3.selectAll("text.caption").attr("x", xScale(date))
+        .attr("y", function(c) {
+          return yScale(yValue(c.values[index]));
+       }).text(function(c) {
+        return "$" + yValue(c.values[index]);
+        });
+      d3.selectAll("text.year").attr("x", xScale(date)).text(year);
+    };
+
+    function mouseout1() {
+      d3.selectAll(".static_year").classed("hidden", false);
+      d3.selectAll("circle").attr("opacity", 0);
+      d3.selectAll("text.caption").text("");
+      d3.selectAll("text.year").text("");
+    };
+
+</script>
+
+
+
+
+
+ <a href="https://nces.ed.gov/programs/digest/d14/tables/dt14_202.25.asp?current=yes">Source: National Center For Education Statistics</a>
+
+</body>
+</html>
