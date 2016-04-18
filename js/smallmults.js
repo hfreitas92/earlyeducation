@@ -161,9 +161,9 @@ function smallmultiples(rawData) {
         .attr("class", "background")
         .style("pointer-events", "all")
         .attr("width", width + margin.right) // extra space for labels that appear
-        .attr("height", height).on("mouseover", mouseover1)
-        .on("mousemove", mousemove1)
-        .on("mouseout", mouseout1);
+        .attr("height", height).on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseout", mouseout);
 
       var lines = svg.append("g");
 
@@ -249,18 +249,18 @@ function smallmultiples(rawData) {
     layoutCharts(data);
   }); // end button setup
 
-    function mouseover1() {
+    function mouseover() {
     d3.selectAll("circle").attr("opacity", 1.0);
     d3.selectAll(".static_year").classed("hidden", true);
     return mousemove.call(this); // current graph base
     };
 
-    function mousemove1() {
+    function mousemove() {
       var date, index, year;
       year = xScale.invert(d3.mouse(this)[0]).getFullYear();
       date = format.parse('' + year);
       index = 0;
-      d3.selectAll("circle")
+      d3.select("circle")
         .attr("cx", xScale(date))
         .attr("cy", function(c) {
           index = bisect(c.values, date, 0, c.values.length - 1);
@@ -275,7 +275,7 @@ function smallmultiples(rawData) {
       d3.selectAll("text.year").attr("x", xScale(date)).text(year);
     };
 
-    function mouseout1() {
+    function mouseout() {
       d3.selectAll(".static_year").classed("hidden", false);
       d3.selectAll("circle").attr("opacity", 0);
       d3.selectAll("text.caption").text("");

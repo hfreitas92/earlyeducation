@@ -8,6 +8,7 @@
 
 .container {
   width: 1050px;
+    
 }    
     
 path {
@@ -179,7 +180,69 @@ svg {
  margin: 50px;   
     
 }
+ 
+ <--stylesforupdateplot-->   
+.updateplotcontainer {
+  width: 1050px;
+}       
     
+  .dots {
+				fill: green;
+				opacity: .7;
+			}
+            
+            .dots:hover {
+				fill: #ccfff2;
+			}
+
+			.dotlabels {
+				font-size: 10px;
+				color: black;
+			}
+
+			.highlighted {
+				fill: orange;
+			}
+
+			.axis1 path,
+			.axis1 line {
+				fill: none;
+				stroke: black;
+				shape-rendering: crispEdges;
+			}
+
+			.axis1 text {
+				font-family: sans-serif;
+				font-size: 11px;
+			}
+
+			.xlabel{
+				font-size: 15px;
+				fill: gray;
+			}
+			.ylabel{
+				font-size: 15px;
+				fill: gray;
+			}
+
+			#menu {
+                margin-top: 20px;
+				padding-left: 300px;
+				font-weight: bolder;
+			}
+    .clicker {
+				font-weight: bolder;
+				color: red;
+				cursor: pointer;
+			}
+    
+#plot {
+    margin-left: 95px;  
+}
+    
+.updateplotbutton {
+      margin-bottom: -2000px;
+}
     
 </style>
 </head>
@@ -188,34 +251,62 @@ svg {
    <div class="introtext">
     <h1>Who's Leading the Way on Early Education and Why It Matters.</h1>
     <h3> Research Indicates that the key to a successful academic career has to do with getting off to a good start.  Although there is bi-partisan support for high-quality early education, some states are doing a better job than others on not only getting young students to enroll but even to provide significant funding for education overall.</h3>
+    <h4>Words + Graphics: Hyan Freitas</h4>
    </div>
    
+   <a name="upmapbutton"></a>
     <div class="textbox">
     <h2>Percentage of 3- and 4-year-old children enrolled in school</h2>
     <h4>Northeastern States Leading the Way in Early Education.</h4>  
     <p>There you find <em>New Jersey</em> and <em>Connecticut</em>, both states with 62% enrolled.</p> 
     <p>However, in the region <em>Rhode Island</em> and <em>Maine</em> stick out with low enrollment with 44% and 45% respectively</p>
     <p>It's also worth noting the discrepancies by race.</p>
-    <a href="https://nces.ed.gov/programs/digest/d14/tables/dt14_202.25.asp?current=yes">Source: National Center For Education Statistics</a>
     </div>
+        <div id="map"></div>
     
-    <div id="map"></div>
-
- <div class="container">
-    <h1>Investing in Every Student</h1>
-    <div id="lead">
+    <a href="#upmapbutton" class="updateplotbutton"> ↑ Back Up</a> 
+    <a href="#smallmultsbutton" class="updateplotbutton"> ↓ Next</a>   
+    <a name="smallmultsbutton"></a>
+ 
+   <div class="textbox">
+    <h2>Investing in Every Student</h2>
 <p>Inflation-adjusted current expenditures per pupil for public elementary and secondary education.</p>
-    </div>
+
     <div id="main">
       <div id="button-wrap">
-        <div id="count" class="button active">Most Per Pupil</div>
+        <div id="state" class="button active">Alphabetical</div>
+        <div id="count" class="button">Most Per Pupil</div>
         <div id="decline" class="button">Biggest Drop</div>
-        <div id="state" class="button">Alphabetical</div>
+       
       </div>
       <div id="vis"></div>
     </div>
   </div> <!--! end of #container -->
+<a href="#smallmultsbutton" class="updateplotbutton"> ↑ Back Up</a>
+ <a href="#updateplotbutton" class="updateplotbutton"> ↓ Next</a>
 
+ 
+<a name="updateplotbutton"></a>
+<div class="textbox">
+ <h2 >Adult Education V.S. A Child's Success</h2>
+    <p>Even with funding, the education system must still overcome the academic disfunction that manifests itself in cycles. </p>
+	<p>Perhaps proving that a great education starts at home, data shows how the highest education of the adult in a household relates to a child's success in school.</p>
+</div>
+		
+
+		<p id="menu" class="picker">
+			<select>
+				<option value="all">All States</option>
+				<option value="more">10 Lowest Performing States</option>
+				<option value="less">Top 10 States</option>
+			</select>
+		</p>
+       <div id="plot"></div>
+ 
+ <a href="#smallmultsbutton" class="updateplotbutton"> ↑ Back Up</a> 
+ 
+ <br>
+ <br>
  
  <a href="https://nces.ed.gov/programs/digest/d14/tables/dt14_202.25.asp?current=yes">Source: National Center For Education Statistics</a>
 
@@ -224,7 +315,10 @@ svg {
 <script src="https://d3js.org/queue.v1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/1.9.0/d3-legend.js"></script>
  <script src="js/map.js"></script>
+ <script src="js/updateplot.js"></script>
 <script src="js/smallmults.js"></script>
+
+
     
 <script type="text/javascript">
 
@@ -238,9 +332,10 @@ queue()
     .defer(d3.json, "data/us-states.json")
     .defer(d3.csv, "data/earlyenrollment.csv")
     .defer(d3.csv, "data/expenditures_sorted.csv")
+    .defer(d3.csv, "data/highschooled.csv")
     .await(ready);
     
-function ready(error, json, states, exp) {
+function ready(error, json, states, exp, sch) {
     
     if (error) {
         console.log(error);
@@ -248,6 +343,7 @@ function ready(error, json, states, exp) {
     
     mymap(json, states);
     smallmultiples(exp); 
+    updatePlot(sch);
 }
   
 
