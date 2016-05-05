@@ -326,8 +326,6 @@ body.nav-fixed-top {
 
 a {
   text-decoration: none;
-  color: #c0392b;
-  text-transform: uppercase;
   transition: color .35s ease;
 }
 a:hover, a:focus, a:visited {
@@ -373,7 +371,7 @@ a:hover, a:focus, a:visited {
 }
     
 .nav.nav-fixed-top a:active { 
-    background-color: yellow;
+    background-color: lightgreen;
 }    
     
 .nav.nav-fixed-top a:hover, .nav.nav-fixed-top a:focus {
