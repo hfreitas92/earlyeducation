@@ -31,6 +31,8 @@ function mymap(json, states) {
                 .append("div")
                 .attr("class", "tooltip")
                 .style("display", "none");
+    
+
 
     drawmap(json, states);
     
@@ -68,6 +70,9 @@ function mymap(json, states) {
     }); // ends data merge
 
     
+        
+        
+        
     // Bind the data to the SVG and create one path per GeoJSON feature
     svg1.selectAll("path")
         .data(json.features)
@@ -79,22 +84,8 @@ function mymap(json, states) {
             var value = d.properties.totals;
             return stateColor(value);
         })
-        .on("mouseover", function(d) {
-            div1.transition()
-               .duration(200)
-               .style("display", null);
-            div1.html("<p>In " + d.properties.name +  " " + d.properties.totals + "% of 3 and 4-year-olds are enrolled in a school.</p>" + "<br>" +  d.properties.whites + "% of those 3 and 4-year-olds are white."+ "<br>" +  d.properties.blacks + "% of those 3 and 4-year-olds are black."+ "<br>" + d.properties.hispanics + "% of those 3 and 4-year-olds are latino."+ "<br>" +  d.properties.asians + "% of those 3 and 4-year-olds are asian.")
-               .style("left", (d3.event.pageX + 10) + "px")
-               .style("top", (d3.event.pageY - 28) + "px");
-        d3.select(this).moveToFront();
-        
-        })
-        // fade out tooltip on mouse out
-        .on("mouseout", function(d) {
-            div1.transition()
-               .duration(500)
-               .style("display", "none");
-        });
+        .on("mouseover",mouseover)
+        .on("mouseout", mouseout)
     
     svg1.append("g")
     .attr("class", "legendColors")
@@ -110,7 +101,40 @@ function mymap(json, states) {
     .call(legendColors);
 
 
-    }  // end drawmap
-} // end map 
+    }// end drawmap
+    
+    
+
+    
+    
+    
+function mouseover(d) {
+            div1.transition()
+               .duration(200)
+               .style("display", null);
+            div1.html("<p>In " + d.properties.name +  " " + d.properties.totals + "% of 3 and 4-year-olds are enrolled in a school.</p>" + "<br>" +  d.properties.whites + "% of those 3 and 4-year-olds are white."+ "<br>" +  d.properties.blacks + "% of those 3 and 4-year-olds are black."+ "<br>" + d.properties.hispanics + "% of those 3 and 4-year-olds are latino."+ "<br>" +  d.properties.asians + "% of those 3 and 4-year-olds are asian.")
+               .style("left", (d3.event.pageX + 10) + "px")
+               .style("top", (d3.event.pageY - 28) + "px");
+        d3.select(this).moveToFront();
+    
+    if (d.properties.name === "Florida") {
+        
+     return barsvg.style("display", null);   
+        
+    }
+    
+}
+    
+function mouseout (d) {
+    div1.transition()
+               .duration(500)
+               .style("display", "none");
+    
+}
+    
+}
+// end map 
     
 // end map.js
+
+

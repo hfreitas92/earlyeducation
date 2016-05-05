@@ -248,8 +248,7 @@ function smallmultiples(rawData) {
     }
     layoutCharts(data);
   }); // end button setup
-
-    function mouseover() {
+function mouseover() {
     d3.selectAll("circle").attr("opacity", 1.0);
     d3.selectAll(".static_year").classed("hidden", true);
     return mousemove.call(this); // current graph base
@@ -277,7 +276,7 @@ function smallmultiples(rawData) {
 
     function mouseout() {
       d3.selectAll(".static_year").classed("hidden", false);
-      d3.selectAll("circle").attr("opacity", 0);
+      
       d3.selectAll("text.caption").text("");
       d3.selectAll("text.year").text("");
     };

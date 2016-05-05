@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<title>Early Education</title>
 <meta charset="utf-8">
 
 
@@ -53,6 +54,8 @@ body {
     
 .textbox {
      margin-left: 50px;
+        font-family: "Futura", Times, serif;
+
 }
     
 a {
@@ -119,6 +122,7 @@ svg {
   fill: none;
   stroke: #334C80;
   stroke-width: 1.4px;
+    pointer-events: none;
 }
 
 .title {
@@ -243,40 +247,245 @@ svg {
 .updateplotbutton {
       margin-bottom: -2000px;
 }
+   
+    
+<--stylesfordotplot-->
+	div.ydotsMinNeeded {
+				color: #6699FF;
+				display: inline;
+			}
+			div.ydotsSpent {
+				color: orange;
+				display: inline;
+			}
+
+			svg {
+				background-color: white;
+			}
+
+			circle {
+				stroke-width: 1;
+			}
+
+			circle.ydotsMinNeeded {
+				fill: grey;
+			}
+
+			circle.ydotsSpent {
+				fill: green;
+			}
+            
+
+			circle:hover {
+				stroke-width: 3;
+				stroke: white;
+			}
+
+			line.grid {
+				stroke: #eee;
+			}
+
+			line.between {
+				stroke: black;
+			}
+    
+    
+             .tooltip_dotplot {
+                    position: absolute;
+                    text-align: center;
+                    min-width: 100px;
+                    font: 12px sans-serif;
+                    background: white;
+                    border: 1px green solid;
+                    border-radius: 5px;
+                    pointer-events: none;   
+                    padding: 10px;
+}
+    
+ 
+
+.bluebox { 
+    float: left; 
+    width: 20px; 
+    height: 20px; 
+    border-radius:50%;
+    background:indianred;
+}    
+.bluebox1 { 
+    float: left; 
+    width: 20px; 
+    height: 20px; 
+    border-radius:50%;
+    background:green;
+} 
+.bluebox2 { 
+    float: left; 
+    width: 20px; 
+    height: 20px; 
+    border-radius:50%;
+    background:grey;
+} 
+ 
+    
+<--stickystyles-->    
+body.nav-fixed-top {
+  padding-top: 45px;
+}
+
+a {
+  text-decoration: none;
+  color: #c0392b;
+  text-transform: uppercase;
+  transition: color .35s ease;
+}
+a:hover, a:focus, a:visited {
+  outline: 0;
+  color: #43140f;
+}
+
+.container {
+  max-width: 960px;
+  width: 95%;
+  margin: 0 auto;
+}
+
+.hero {
+  background: #ccfff2;
+  padding: 200px 40px;
+  margin: 0;
+  text-align: center;
+  color: #d9d9d9;
+}
+
+.nav {
+  margin: 0;
+  padding: 20px 0;
+  background: #f2f2f2;
+  list-style: none;
+  text-align: center;
+  transition: all .15s ease;
+}
+.nav.nav-fixed-top {
+  top: 0;
+  z-index: 100;
+  position: fixed;
+  width: 100%;
+  background: green;
+  padding: 0;
+}
+.nav.nav-fixed-top a {
+  color: white;
+}
+.nav.nav-fixed-top a:visited {
+  color: white;
+}
+    
+.nav.nav-fixed-top a:active { 
+    background-color: yellow;
+}    
+    
+.nav.nav-fixed-top a:hover, .nav.nav-fixed-top a:focus {
+  outline: 0;
+  color: #f2c9c5;
+}
+.nav ul {
+  padding: 0;
+  margin: 5px 0;
+}
+.nav ul li {
+  display: inline-block;
+  padding: 0 20px;
+}
+
+.body-content {
+  margin: 0;
+  padding: 15px 0;
+  font-size: 1.8rem;
+  line-height: 1.38;
+}
+ 
+h3 {
+    color: black;
+}
+    
+
     
 </style>
 </head>
 <body>
    
-   <div class="introtext">
-    <h1>Who's Leading the Way on Early Education and Why It Matters.</h1>
-    <h3> Research Indicates that the key to a successful academic career has to do with getting off to a good start.  Although there is bi-partisan support for high-quality early education, some states are doing a better job than others on not only getting young students to enroll but even to provide significant funding for education overall.</h3>
-    <h4>Words + Graphics: Hyan Freitas</h4>
-   </div>
    
+   <header class="hero">
+       <h1>Who's Leading the Way on Early Education and Why It Matters.</h1>
+        <h3>Words + Graphics: Hyan Freitas</h3>
+    <h3 align="left" > Research Indicates that the key to a successful academic career has to do with getting off to a good start.  Although there is bi-partisan support for high-quality early education, some states are doing a better job than others on not only getting young students to enroll but even to provide significant funding for education overall.</h3>
+   
+  </header>
+   
+   
+    
+   
+   
+   
+   
+ <nav class="nav" role="navigation">
+    <div class="container">
+      <ul>
+        <li><a href="#enrollment">1. Enrollment</a></li>
+        <li><a href="#funding">2. Investing in Every Student</a></li>
+        <li><a href="#standards">3. Meeting Funding Benchmarks</a></li>
+        <li><a href="#cycle">4. The Vicious Cycle</a></li>
+      </ul>
+    </div>
+  </nav> 
+   
+
+ 
+
+
+
+
+
+ 
+   
+   
+   
+   
+   
+   
+   
+   
+
+   
+
    <a name="upmapbutton"></a>
+    
+    
     <div class="textbox">
+    <div id="enrollment"></div>
     <h2>Percentage of 3- and 4-year-old children enrolled in school</h2>
-    <h4>Northeastern States Leading the Way in Early Education.</h4>  
+    <h4>At a glance, Northeastern states seem to be leading the Way in getting their kids into the school system early.</h4>  
     <p>There you find <em>New Jersey</em> and <em>Connecticut</em>, both states with 62% enrolled.</p> 
-    <p>However, in the region <em>Rhode Island</em> and <em>Maine</em> stick out with low enrollment with 44% and 45% respectively</p>
-    <p>It's also worth noting the discrepancies by race.</p>
+    <p>However, also in that region <em>Rhode Island</em> and <em>Maine</em> stick out with low enrollment with 44% and 45% respectively.</p>
+    <p>It's also worth noting the discrepancies by race.  </p>
     </div>
         <div id="map"></div>
-    
+        
+  
     <a href="#upmapbutton" class="updateplotbutton"> ↑ Back Up</a> 
     <a href="#smallmultsbutton" class="updateplotbutton"> ↓ Next</a>   
     <a name="smallmultsbutton"></a>
  
    <div class="textbox">
-    <h2>Investing in Every Student</h2>
+    <h2 id="funding">Investing in Every Student</h2>
 <p>Inflation-adjusted current expenditures per pupil for public elementary and secondary education.</p>
+<p> An <a href="https://www.washingtonpost.com/news/local/wp/2015/06/02/the-states-that-spend-the-most-and-the-least-on-education-in-one-map/" target="_blank">article in the Washington Post</a> explains that "part of the variation is due to the huge differences in costs of living nationwide, which influence everything from teacher salaries to the cost of building and maintaining school facilities. Part is also due to economic realities — many states’ education spending remains lower than it was before the recession. And part of the variation is due to political decisions to invest more or less in schools, or to do more or less to equalize education spending across low- and high-income areas."</p>
 
     <div id="main">
       <div id="button-wrap">
-        <div id="state" class="button active">Alphabetical</div>
-        <div id="count" class="button">Most Per Pupil</div>
-        <div id="decline" class="button">Biggest Drop</div>
+        <div id="state" class="button">Alphabetical</div>
+        <div id="count" class="button active">Most Per Pupil</div>
+        <div id="decline" class="button">Stagnant Funding</div>
        
       </div>
       <div id="vis"></div>
@@ -286,11 +495,29 @@ svg {
  <a href="#updateplotbutton" class="updateplotbutton"> ↓ Next</a>
 
  
+ <div class="textbox">
+ <h2 id="standards">Meeting Funding Benchmarks</h2>
+   <p>Even as we take a closer look at which states are funding early education and which are cutting back, there is perhaps an even bigger issue to be grappled with when looking at whether current funding, no matter how much it is, is even up to the standards set by groups like the National Institute for Early Education Research.</p>
+   <p> The states below are in order from states that have spent the most total resources per child enrolled in pre-k.  As we go down the list, we begin to better see not only the differences in spending but also how that spending compares with benchmarks set by NIEER.  The further down the list, not only do we find the states spending less but also the states that have the biggest gap to fill to meet the minimum funding benchmark.</p>
+</div>
+
+ <ul>
+    <ol><span class="bluebox"></span> Reported per child funding: Insufficient Funding</ol>
+    <ol><span class="bluebox1"></span> Reported per child funding: Over minimum benchmark </ol>
+    <ol><span class="bluebox2"></span> Estimate of per-child spending needed to meet NIEER benchmarks</ol>
+    <ol>  - - -  Hovering over lines reveals either how much funding is needed to meet benchmark or by how much funding surpasses that state's benchmark.  </ol>
+</ul>
+
+ <div id= "dotsplot"></div>
+  
+ 
 <a name="updateplotbutton"></a>
 <div class="textbox">
- <h2 >Adult Education V.S. A Child's Success</h2>
-    <p>Even with funding, the education system must still overcome the academic disfunction that manifests itself in cycles. </p>
+ <h2 id="cycle">The Vicious Cycle: Adult Education V.S. A Child's Success</h2>
+    <p>Helping make the case for funding education programs, particularly early education programs is data that reveals what is at stake if the issues tied to a lack of quality education isn't addressed.Even with funding, the education system must still overcome the academic disfunction that manifests itself in cycles. </p>
+    <p>Think of it as a vicious cycle. A cycle in which the child whose parent wasn't able to advance his or her education grows up to become a parent who wasn't able to advance his or her own education. The future is not waiting for those caught up in this cycle. Experts predict "by 2020, the United States is expected to face a shortage of 1.5 million workers with college degrees but will have a surplus of 6 million individuals without a high school diploma who are unemployed because they lack necessary educational credentials."</p>
 	<p>Perhaps proving that a great education starts at home, data shows how the highest education of the adult in a household relates to a child's success in school.</p>
+	<p> The chart below breaks down the states who have a bigger link between kids repeating a grade coming from a household where an adult has lower than a high school education compared to the states which have a smaller link. </p>
 </div>
 		
 
@@ -308,6 +535,9 @@ svg {
  <br>
  <br>
  
+
+
+ 
  <a href="https://nces.ed.gov/programs/digest/d14/tables/dt14_202.25.asp?current=yes">Source: National Center For Education Statistics</a>
 
 
@@ -317,7 +547,10 @@ svg {
  <script src="js/map.js"></script>
  <script src="js/updateplot.js"></script>
 <script src="js/smallmults.js"></script>
-
+<script src="js/dotplot.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="js/sticky.js"></script>
+    
 
     
 <script type="text/javascript">
@@ -333,9 +566,10 @@ queue()
     .defer(d3.csv, "data/earlyenrollment.csv")
     .defer(d3.csv, "data/expenditures_sorted.csv")
     .defer(d3.csv, "data/highschooled.csv")
+    .defer(d3.csv, "data/eduresources.csv")
     .await(ready);
     
-function ready(error, json, states, exp, sch) {
+function ready(error, json, states, exp, sch, dot) {
     
     if (error) {
         console.log(error);
@@ -344,11 +578,12 @@ function ready(error, json, states, exp, sch) {
     mymap(json, states);
     smallmultiples(exp); 
     updatePlot(sch);
+    dotPlot(dot);
 }
   
 
     
-// start small mults
+
     
     
 

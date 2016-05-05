@@ -41,7 +41,17 @@ function updatePlot(data) {
 						.append("g")
 						.attr("transform", "translate(" + margin.left + "," + margin.right + ")");
 
-		// utility for label placement jitter
+		
+            var plotTooltip = d3.select("#plot")
+      	                 .append("div")
+      	                 .attr("class", "tooltip")
+            .style("display", "none");
+    
+    
+    
+    
+    
+    // utility for label placement jitter
 		function getRandomInt(min, max) {
   			return Math.floor(Math.random() * (max - min + 1) + min);
 				}
@@ -159,10 +169,9 @@ function plotData(data) {
 									}
 								})  // */
 								.attr("class", "dots")
-								.append("title")
-								.text(function(d) {
-									return " In " + d.state + " " + d.lessThanHigh + "% of kids that come from a houshold where an adult has less than a high school education have repeated 1 or more grades compared to " + d.moreThanHigh + "% of kids from a houshold where an adult has more than a high school education have repeated 1 or more grades.";
-								});
+								.on("mouseover", mouseover)
+                                .on("mouseout", mouseout)
+                                .on("mousemove",mousemove);
 
 							// transition of them
 							circles
@@ -262,4 +271,37 @@ function plotData(data) {
 
 						} // end of render
 }
-			};
+			
+
+
+function mouseover(d) {
+       plotTooltip
+        .transition()  
+        .duration(200)
+        .style("display", null);
+        plotTooltip.html("<p>In "+ d.state + " " + d.lessThanHigh + "% of kids that come from a houshold where an adult has less than a high school education have repeated 1 or more grades.</p>" +"<br>" + "<p>" +  d.moreThanHigh + "% of kids from a houshold where an adult has more than a high school education have repeated 1 or more grades.</p>");
+         
+              
+}
+
+    
+function mousemove (d) {
+            plotTooltip
+                 .style("left", (d3.event.pageX + 10) + "px")
+               .style("top", (d3.event.pageY - 28) + "px");
+    d3.select(this).moveToFront();
+}
+    
+function mouseout(d) {
+     plotTooltip.transition()
+               .duration(500)
+                .style("display", "none");
+            
+               
+}
+
+
+
+
+
+};
