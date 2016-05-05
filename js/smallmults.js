@@ -249,7 +249,7 @@ function smallmultiples(rawData) {
     layoutCharts(data);
   }); // end button setup
 function mouseover() {
-    d3.selectAll("circle").attr("opacity", 1.0);
+   // d3.selectAll("circle").attr("opacity", 1.0);
     d3.selectAll(".static_year").classed("hidden", true);
     return mousemove.call(this); // current graph base
     };
