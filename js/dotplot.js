@@ -105,7 +105,7 @@ function dotPlot(data) {
                     .on("mousemove",mousemoveDif);
 
 
-				// Make the dots for 1990
+				
 
 				var dotsSpent = svg.selectAll("circle.ydotsSpent")
 						.data(data)
@@ -145,7 +145,7 @@ function dotPlot(data) {
 					.append("title")
 					
 
-				// Make the dots for 2015
+				
 
 				var dotsMinNeeded = svg.selectAll("circle.ydotsMinNeeded")
 						.data(data)
